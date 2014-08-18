@@ -1,8 +1,12 @@
+// modified to work with EFCom GPRS/GSM Shield
+// http://www.elecfreaks.com/store/gprsgsm-shield-efcom-shdefcom-p-415.html
 #ifndef GSM_H
 #define GSM_H
 
-#define UNO
-//#define MEGA
+//#define UNO
+#define MEGA
+
+#define EFCOM
 
 #include <SoftwareSerial.h>
 #include <inttypes.h>
@@ -50,6 +54,11 @@
 #define DTMF_DATA1          73 // connect DTMF Data1 to pin 73
 #define DTMF_DATA2          74 // connect DTMF Data2 to pin 74
 #define DTMF_DATA3          75 // connect DTMF Data3 to pin 75
+
+#ifdef EFCOM
+#define GSM_ON              6 // connect GSM Module turn ON to pin 77 
+#define GSM_RESET           5 // connect GSM Module RESET to pin 35
+#endif
 
 // length for the internal communication buffer
 #define COMM_BUF_LEN        200

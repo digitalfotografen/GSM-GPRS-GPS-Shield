@@ -300,10 +300,11 @@ int InetGSM::closemail()
 int InetGSM::attachGPRS(char* domain, char* dom1, char* dom2)
 {
      int i=0;
-     delay(5000);
+     gsm.SendATCmdWaitResp(str_at, 5000, 100, str_ok, 5);
+     //delay(5000);
 
      //gsm._tf.setTimeout(_GSM_DATA_TOUT_);	//Timeout for expecting modem responses.
-     gsm.WaitResp(50, 50);
+     //gsm.WaitResp(50, 50);
      gsm.SimpleWriteln("AT+CIFSR");
      if(gsm.WaitResp(5000, 50, "ERROR")!=RX_FINISHED_STR_RECV) {
 #ifdef DEBUG_ON
@@ -358,8 +359,7 @@ int InetGSM::attachGPRS(char* domain, char* dom1, char* dom2)
 #ifdef DEBUG_ON
           Serial.println("DB:APN OK");
 #endif
-          delay(5000);
-
+          delay(1000); //delay(5000);
           gsm.SimpleWriteln("AT+CIICR");
 
           switch(gsm.WaitResp(10000, 50, "OK")) {
