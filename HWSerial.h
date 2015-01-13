@@ -1,11 +1,15 @@
-//#define MEGA
-
 #ifndef _HWSERIAL_H_
 #define _HWSERIAL_H_
 
 #include "Arduino.h"
 #include "Streaming.h"
 #include <inttypes.h>
+
+#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
+     #define MEGA
+#else
+     #define UNO
+#endif
 
 
 class HWSerial {

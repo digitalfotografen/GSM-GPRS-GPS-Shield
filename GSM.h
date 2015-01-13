@@ -1,8 +1,11 @@
 #ifndef GSM_H
 #define GSM_H
 
-#define UNO
-//#define MEGA
+#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
+     #define MEGA
+#else
+     #define UNO
+#endif
 
 #include <SoftwareSerial.h>
 #include <inttypes.h>
