@@ -72,13 +72,13 @@ int GSM::begin(long baud_rate)
                digitalWrite(GSM_ON, HIGH);
                delay(1200);
                digitalWrite(GSM_ON, LOW);
-               delay(1000); //delay(10000); faster and stable startup.
-               WaitResp(10000, 1000); //WaitResp(1000, 1000);
+               delay(10000);
+               WaitResp(1000, 1000);
           } else {
 #ifdef DEBUG_ON
                Serial.println(F("DB:ELSE"));
 #endif
-               WaitResp(1000, 100);
+               WaitResp(1000, 1000);
           }
      }
 
