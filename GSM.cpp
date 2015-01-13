@@ -690,14 +690,14 @@ void GSM::RxInit(uint16_t start_comm_tmout, uint16_t max_interchar_tmout)
 
 void GSM::Echo(byte state)
 {
-     if (state == 0 or state == 1) {
-          SetCommLineStatus(CLS_ATCMD);
-
-          _cell.print("ATE");
-          _cell.print((int)state);
-          _cell.print("\r");
-          delay(500);
-          SetCommLineStatus(CLS_FREE);
+     switch(state){
+          case 0:
+               SendATCmdWaitResp(F("ATE0"), 500, 50, str_ok, 5);
+               break;
+          
+          case 1:
+               SendATCmdWaitResp(F("ATE0"), 500, 50, str_ok, 5);
+               break;
      }
 }
 
