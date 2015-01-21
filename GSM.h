@@ -1,11 +1,12 @@
+// modified to work with EFCom GPRS/GSM Shield
+// http://www.elecfreaks.com/store/gprsgsm-shield-efcom-shdefcom-p-415.html
 #ifndef GSM_H
 #define GSM_H
 
-#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
-     #define MEGA
-#else
-     #define UNO
-#endif
+//#define UNO
+#define MEGA
+
+//#define EFCOM
 
 #include <SoftwareSerial.h>
 #include <inttypes.h>
@@ -26,6 +27,8 @@
 #ifdef MEGA
 #include "HWSerial.h"
 #endif
+
+
 
 // if defined - debug print is enabled with possibility to print out
 // debug texts to the terminal program
@@ -53,6 +56,11 @@
 #define DTMF_DATA1          73 // connect DTMF Data1 to pin 73
 #define DTMF_DATA2          74 // connect DTMF Data2 to pin 74
 #define DTMF_DATA3          75 // connect DTMF Data3 to pin 75
+
+#ifdef EFCOM
+#define GSM_ON              6 // connect GSM Module turn ON to pin 77 
+#define GSM_RESET           5 // connect GSM Module RESET to pin 35
+#endif
 
 // length for the internal communication buffer
 #define COMM_BUF_LEN        200
@@ -123,6 +131,7 @@ enum at_resp_enum {
 enum registration_ret_val_enum {
      REG_NOT_REGISTERED = 0,
      REG_REGISTERED,
+     REG_REGISTERED_ROAMING,
      REG_NO_RESPONSE,
      REG_COMM_LINE_BUSY,
 
@@ -161,7 +170,7 @@ enum getsms_ret_val_enum {
 
 class GSM {
 public:
-     enum GSM_st_e { ERROR, IDLE, READY, ATTACHED, TCPSERVERWAIT, TCPCONNECTEDSERVER, TCPCONNECTEDCLIENT };
+     enum GSM_st_e { ERROR, OFF, IDLE, READY, ATTACHED, TCPSERVERWAIT, TCPCONNECTEDSERVER, TCPCONNECTEDCLIENT };
      byte comm_buf[COMM_BUF_LEN+1];  // communication buffer +1 for 0x00 termination
      void InitParam (byte group);
 

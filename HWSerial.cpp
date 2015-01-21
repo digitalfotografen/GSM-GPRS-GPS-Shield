@@ -1,5 +1,7 @@
 #include "HWSerial.h"
-#ifdef MEGA
+#ifdef USE_HW_SERIAL
+#include <avr/pgmspace.h>
+
 HWSerial::HWSerial()
 {
      Serial1.begin(9600);
@@ -41,6 +43,11 @@ size_t HWSerial::write(uint8_t byte)
 int HWSerial::read()
 {
      return Serial1.read();
+}
+
+int HWSerial::readBytes(char *buffer, int length)
+{
+     return Serial1.readBytes(buffer, length);
 }
 
 int HWSerial::available()
@@ -129,6 +136,11 @@ size_t HWSerial::print(unsigned long n, int base)
 size_t HWSerial::print(double n, int digits)
 {
      return printFloat(n, digits);
+}
+
+size_t HWSerial::print(const Printable&)
+{
+     return Serial1.print(Printable&);
 }
 
 size_t HWSerial::println(const __FlashStringHelper *ifsh)

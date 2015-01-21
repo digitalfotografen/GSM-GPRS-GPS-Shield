@@ -505,6 +505,7 @@ return values:
 **********************************************************/
 byte GSM::CheckRegistration(void)
 {
+    bool roaming = false;
      byte status;
      byte ret_val = REG_NOT_REGISTERED;
 
@@ -524,7 +525,9 @@ byte GSM::CheckRegistration(void)
                // ----------------------------
                module_status |= STATUS_REGISTERED;
 
-
+              // check roaming
+              roaming = IsStringReceived("+CREG: 0,5");
+              
                // in case GSM module is registered first time after reset
                // sets flag STATUS_INITIALIZED
                // it is used for sending some init commands which
@@ -535,7 +538,7 @@ byte GSM::CheckRegistration(void)
                     SetCommLineStatus(CLS_FREE);
                     InitParam(PARAM_SET_1);
                }
-               ret_val = REG_REGISTERED;
+               ret_val = roaming ? REG_REGISTERED_ROAMING : REG_REGISTERED;
           } else {
                // NOT registered
                // --------------
