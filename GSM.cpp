@@ -336,6 +336,8 @@ void GSM::InitParam(byte group)
           //SendATCmdWaitResp("AT#GPIO=5,0,2", 500, 50, str_ok, 5);
           // Switch OFF User LED- just as signalization we are finished
           //SendATCmdWaitResp("AT#GPIO=8,0,1", 500, 50, str_ok, 5);
+          // enable automatic date and time adjust
+          SendATCmdWaitResp(F("AT+CLTS=1"), 500, 50, str_ok, 5);
           SetCommLineStatus(CLS_FREE);
           break;
 
@@ -553,7 +555,7 @@ byte GSM::IsRxFinished(void)
           // Reception already started
           // check new received bytes
           // only in case we have place in the buffer
-          num_of_bytes = _cell.available();
+          num_of_bytes = min(_cell.available(), COMM_BUF_LEN-1);
           // if there are some received bytes postpone the timeout
           if (num_of_bytes) prev_time = millis();
 

@@ -21,7 +21,7 @@
 #define lf    10 //Ascii character for line feed.
 #define GSM_LIB_VERSION 308 // library version X.YY (e.g. 1.00)
 
-#define DEBUG_ON
+//#define DEBUG_ON
 
 
 #ifdef MEGA
@@ -96,6 +96,8 @@
 enum sms_type_enum {
      SMS_UNREAD,
      SMS_READ,
+     SMS_UNSENT,
+     SMS_SENT,
      SMS_ALL,
 
      SMS_LAST_ITEM
@@ -133,6 +135,7 @@ enum registration_ret_val_enum {
      REG_REGISTERED,
      REG_REGISTERED_ROAMING,
      REG_NO_RESPONSE,
+     REG_DENIED,
      REG_COMM_LINE_BUSY,
 
      REG_LAST_ITEM
@@ -244,6 +247,9 @@ public:
      // checks if module is registered in the GSM network
      // must be called regularly
      byte CheckRegistration(void);
+     
+     // Check signal quality
+     byte GetSignalQuality(void);
 
      // User button methods
      inline byte IsUserButtonEnable(void) {
