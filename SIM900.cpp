@@ -505,7 +505,7 @@ return values:
 **********************************************************/
 byte GSM::CheckRegistration(void)
 {
-    bool roaming = false;
+     bool roaming = false;
      byte status;
      byte ret_val = REG_NOT_REGISTERED;
 
@@ -543,7 +543,8 @@ byte GSM::CheckRegistration(void)
                // NOT registered
                // --------------
                module_status &= ~STATUS_REGISTERED;
-               ret_val = REG_NOT_REGISTERED;
+               ret_val = IsStringReceived("+CREG: 0,3") ? 
+                         REG_DENIED : REG_NOT_REGISTERED;
           }
      } else {
           // nothing was received
@@ -555,6 +556,49 @@ byte GSM::CheckRegistration(void)
 
      return (ret_val);
 }
+
+/**********************************************************
+Method checks signal strength
+- calls CSQ and returns the first value
+- returns 99 if unknown or fails to read
+**********************************************************/
+byte GSM::GetSignalQuality(void){
+  byte status;
+  byte result = 99;
+  int i = 0;
+
+  while ((i++ < 3) && (result == 99)){
+    if (CLS_FREE != GetCommLineStatus()) {
+      Serial.println("CSQ Busy");
+    } else {
+      SetCommLineStatus(CLS_ATCMD);
+
+      gsm.RxInit(2000, 50);
+      gsm.SimpleWriteln("AT+CSQ");
+      do {
+        status = gsm.IsRxFinished();
+      } while (status == RX_NOT_FINISHED);
+  
+      if (status == RX_FINISHED) {
+        char * pch;
+        pch = strstr((char *)gsm.comm_buf,"CSQ:");
+        if (pch != NULL){
+          //Serial.print("CSQ:");
+          //Serial.println(pch+4);
+          result = (byte) atoi(pch+4);
+        } else {
+          Serial.println("CSQ failed");
+        }
+      } else {
+        Serial.println("CSQ timout");
+      }
+    }
+  }
+
+  SetCommLineStatus(CLS_FREE);
+  return result;
+}
+
 
 
 /**********************************************************
